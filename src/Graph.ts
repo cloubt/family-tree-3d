@@ -1,16 +1,8 @@
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
-import { BoxGeometry, BufferGeometry, Color, ConeGeometry, Line, LineBasicMaterial, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from 'three'
-/*
-nodes must represent css2dobjects which can be added to a css2drenderer really easily
-graph must 
+import { BufferGeometry, Color, ConeGeometry, Line, LineBasicMaterial, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from 'three'
 
-
-*/
-//const MAX_POINTS = 500
-
-// the matrix
+// up direction required for the arrow heads in directed edges to point in correct direction
 const DEFAULT_UP = new Vector3(0,1,0)
-
 
 class Graph {
     static numVertices: number
@@ -84,6 +76,7 @@ class Graph {
         Graph.edges.forEach(edge => edge.updateEdgePosition())
     }
 }
+
 class Vertex {
     name: string
     color: Color
@@ -115,7 +108,6 @@ class Vertex {
         return this.mesh.position;
     }
 }
-// overhaul the lines (spline editable? at least more visible with cylinder or something)
 class Edge {
     readonly id: number
     value: string
@@ -212,6 +204,7 @@ class Label {
         this.object = new CSS2DObject(this.element)
     }
 }
+
 interface VertexParameters {
     name: string
     color?: Color
@@ -236,10 +229,3 @@ interface EdgeParameters {
 export {
     Graph
 }
-
-
-// var eles = cy.add([
-//     { group: 'nodes', data: { id: 'n0' }, position: { x: 100, y: 100 } },
-//     { group: 'nodes', data: { id: 'n1' }, position: { x: 200, y: 200 } },
-//     { group: 'edges', data: { id: 'e0', from: 'n0', target: 'n1' } }
-//   ]);
