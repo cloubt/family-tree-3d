@@ -1,14 +1,13 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, PointLight, GridHelper, Color } from 'three'
+import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, PointLight, GridHelper } from 'three'
 import './style.css'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { Graph } from "./Graph"
 import WebGL from 'three/examples/jsm/capabilities/WebGL'
-
+import data from './output.json' assert {type: 'json'}
 let renderer: WebGLRenderer
 let scene: Scene
 let camera: PerspectiveCamera
 const manipulator = new Graph()
-let t = 0
 
 function init() {
     // renderer
@@ -40,23 +39,24 @@ function init() {
     scene.add( light )
 
   // graph
-  manipulator.addVertex({name: "+x", position: {x: 15, y: 0, z: 15}})
-  manipulator.addVertex({name: "simon", position: {x: 0, y: 0, z: 0}})
-  manipulator.addVertex( {name: "+z", position: {x: -15, y: 0, z: 45}} )
+  Graph.importData(data)
+  // manipulator.addVertex({name: "+x", position: {x: 15, y: 0, z: 15}})
+  // manipulator.addVertex({name: "simon", position: {x: 0, y: 0, z: 0}})
+  // manipulator.addVertex( {name: "+z", position: {x: -15, y: 0, z: 45}} )
   Graph.getVertices().forEach((vertex) => scene.add( vertex.mesh! ))
-  manipulator.addEdge( {value: "pee", from: "+x", to: "simon"} )
-  manipulator.addEdge( {value: "hello", from: "+z", to: "simon", directed: true, color: new Color(0x00FF00)} )
+  // manipulator.addEdge( {value: "pee", from: "+x", to: "simon"} )
+  // manipulator.addEdge( {value: "hello", from: "+z", to: "simon", directed: true, color: new Color(0x00FF00)} )
   //scene.add(Graph.getEdge("+z", "+x").arrowMesh)
   //manipulator.addEdge( {value: "poop", from: "simon", to: "+z"} )
   Graph.getEdges().forEach(edge => scene.add( edge.lineMesh! ) )
 
+  
   controls.update()
 }
 function animate() {
   requestAnimationFrame( animate )
-  t += 0.005
   manipulator.labelRenderer.render( scene, camera )
-  Graph.vertices.get("simon")!.mesh.position.set(Math.cos(t) * 20, Math.sin(t) * 20, 0)
+  //Graph.vertices.get("simon")!.mesh.position.set(Math.cos(t) * 20, Math.sin(t) * 20, 0)
   manipulator.update()
 
   renderer.render( scene, camera )

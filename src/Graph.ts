@@ -1,6 +1,5 @@
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
 import { BufferGeometry, Color, ConeGeometry, Line, LineBasicMaterial, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from 'three'
-
 // up direction required for the arrow heads in directed edges to point in correct direction
 const DEFAULT_UP = new Vector3(0,1,0)
 
@@ -21,11 +20,11 @@ class Graph {
             document.body.appendChild( this.labelRenderer.domElement )
     }
 
-    addVertex(parameters: VertexParameters) {
+    static addVertex(parameters: VertexParameters): void {
         Graph.vertices.set(parameters.name, new Vertex(parameters))
         Graph.numVertices++
     }
-    addEdge(parameters: EdgeParameters) {
+    static addEdge(parameters: EdgeParameters): void {
         // create
         if ( !Graph.vertices.has(parameters.from)) throw new Error(`Could not find source vertex ${parameters.from}`)
         if ( !Graph.vertices.has(parameters.to)) throw new Error(`Could not find source vertex ${parameters.to}`)
@@ -75,6 +74,28 @@ class Graph {
         }
         Graph.edges.forEach(edge => edge.updateEdgePosition())
     }
+
+    static importData(elements: ImportDataParameters[]): any {
+        elements.forEach((element: ImportDataParameters) => {
+            if (element.data === "vertex") {
+                Graph.vertices.set(element.name, new Vertex({
+                    name: element.name,
+                    position: new Vector3(Math.random()*100 - 50, Math.random()*100 - 50, Math.random()*100 - 50)
+                }))
+                Graph.numVertices++;
+            } else if (element.data === "edge") {
+                Graph.addEdge({
+                    name: element.name,
+                    from: element.from,
+                    to: element.to,
+                    directed: element.directed
+                })
+            } else {
+                console.log(element)
+                throw new Error("something bad happened")
+            }
+        })
+    }
 }
 
 class Vertex {
@@ -89,7 +110,7 @@ class Vertex {
     readonly label: Label
 
     constructor(parameters: VertexParameters) {
-        this.name = parameters.name
+        this.name = parameters.name.toLowerCase()
         this.radius = parameters.radius ?? 5
         this.widthSegments = parameters.widthSegments ?? 16
         this.heightSegments = parameters.heightSegments ?? 8
@@ -101,7 +122,7 @@ class Vertex {
             this.mesh.position.set( parameters.position.x, parameters.position.y, parameters.position.z )
         this.label = new Label( this.name )
             this.mesh.add( this.label.object )
-        console.log(this)
+        console.log(`added new vertex named ${this.name}!`)
     }
     
     get position(): Vector3 {
@@ -218,14 +239,30 @@ interface Vector3Parameters {
     y: number
     z: number
 }
-interface EdgeParameters {
-    value: string
-    from: string
-    to: string
+interface EdgeParameters{
+    name: string
+    from?: string
+    to?: string
     directed?: boolean
     color?: Color
 }
-
+interface ImportDataParameters extends EdgeParameters, VertexParameters{
+    data: string
+    name: string
+    from?: string
+    to?: string
+    directed?: boolean
+}
 export {
     Graph
 }
+
+/*
+    {
+        "data": "edge",
+        "name": "servant",
+        "from": "tristan",
+        "to": "cj",
+        "directed": true
+    },
+    */
