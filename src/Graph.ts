@@ -35,7 +35,7 @@ class Graph {
             Graph.edges.set( Graph.numEdges, new Edge(parameters, Graph.numEdges) )
         }
         // render
-        this.update(Graph.numEdges)
+        Graph.update(Graph.numEdges)
         Graph.numEdges++
     }
 
@@ -67,7 +67,7 @@ class Graph {
     }
 
     // optimize this maybe
-    update(identifier?: number) {
+    static update(identifier?: number) {
         if (typeof identifier !== "undefined") {
             Graph.edges.get(identifier)?.updateEdgePosition()
             return 
@@ -84,6 +84,9 @@ class Graph {
                 }))
                 Graph.numVertices++;
             } else if (element.data === "edge") {
+                if ( typeof element.to === "undefined" 
+                || typeof element.from === "undefined"
+                || typeof element.directed === "undefined" ) throw new Error(`Edge ${element.name} had malformed source and/or destination vertices!`)
                 Graph.addEdge({
                     name: element.name,
                     from: element.from,
@@ -144,7 +147,7 @@ class Edge {
     
     constructor(parameters: EdgeParameters, id: number) {
         this.id = id
-        this.value = parameters.value
+        this.value = parameters.name
         this.source = Graph.getVertex(parameters.from)
         this.destination = Graph.getVertex(parameters.to)
         this.label = new Label(this.value)
@@ -241,17 +244,19 @@ interface Vector3Parameters {
 }
 interface EdgeParameters{
     name: string
-    from?: string
-    to?: string
+    from: string
+    to: string
     directed?: boolean
     color?: Color
 }
-interface ImportDataParameters extends EdgeParameters, VertexParameters{
+interface ImportDataParameters {
     data: string
     name: string
     from?: string
     to?: string
     directed?: boolean
+    color?: Color
+    position?: Vector3Parameters
 }
 export {
     Graph

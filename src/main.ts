@@ -57,7 +57,7 @@ function animate() {
   requestAnimationFrame( animate )
   manipulator.labelRenderer.render( scene, camera )
   //Graph.vertices.get("simon")!.mesh.position.set(Math.cos(t) * 20, Math.sin(t) * 20, 0)
-  manipulator.update()
+  Graph.update()
 
   renderer.render( scene, camera )
 }
