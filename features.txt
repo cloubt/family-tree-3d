@@ -2,20 +2,22 @@ make lines better
     convert to cylinders
     convert to spline??? use spline editor??
 
-
 make vertices moveable (use coordinate thing from spline example)
     add texture to vertices?
 
 neighborhood selector (when vertex clicked, make all others transparent)
 relation selector (when edge clicked make all others transparent)
 
+general ui to do everything (change colors, randomize position, etc)
+
+custom family tree maker??????????????? like you can spawn in your own vertices/edges?????
+
+COMPLETED
+------------------------
 convert data to json with node.js fs module
     do this already...
     import into main
     graph function to handle json data
     spawn in everything from said json data
 
-
-general ui to do everything (change colors, randomize position, etc)
-
-custom family tree maker??????????????? like you can spawn in your own vertices/edges?????
+profiling capabilities
