@@ -1,5 +1,4 @@
 make lines better
-    convert to cylinders
     convert to spline??? use spline editor??
 
 make vertices moveable (use coordinate thing from spline example)
@@ -19,5 +18,8 @@ convert data to json with node.js fs module
     import into main
     graph function to handle json data
     spawn in everything from said json data
+
+converted lines to cylinders
+spaced directed lines out
 
 profiling capabilities

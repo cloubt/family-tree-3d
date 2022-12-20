@@ -1,5 +1,5 @@
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
-import { BufferGeometry, Color, ConeGeometry, Line, LineBasicMaterial, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from 'three'
+import { BufferGeometry, Color, ConeGeometry, Curve, CurvePath, Euler, Line, LineBasicMaterial, LineCurve3, Matrix4, Mesh, MeshBasicMaterial, MeshLambertMaterial, MeshStandardMaterial, QuadraticBezierCurve3, SphereGeometry, TubeGeometry, Vector3 } from 'three'
 // up direction required for the arrow heads in directed edges to point in correct direction
 const DEFAULT_UP = new Vector3(0,1,0)
 
@@ -80,7 +80,7 @@ class Graph {
             if (element.data === "vertex") {
                 Graph.vertices.set(element.name, new Vertex({
                     name: element.name,
-                    position: new Vector3(Math.random()*100 - 50, Math.random()*100 - 50, Math.random()*100 - 50)
+                    position: new Vector3().randomDirection().setLength(50)
                 }))
                 Graph.numVertices++;
             } else if (element.data === "edge") {
@@ -94,7 +94,7 @@ class Graph {
                     directed: element.directed
                 })
             } else {
-                console.log(element)
+                console.debug(element)
                 throw new Error("something bad happened")
             }
         })
@@ -108,24 +108,27 @@ class Vertex {
     widthSegments: number // 16
     heightSegments: number // 8
     geometry: SphereGeometry
-    readonly material: MeshStandardMaterial
-    readonly mesh: Mesh<SphereGeometry, MeshStandardMaterial>
+    readonly material: MeshLambertMaterial
+    readonly mesh: Mesh<SphereGeometry, MeshLambertMaterial>
     readonly label: Label
 
     constructor(parameters: VertexParameters) {
         this.name = parameters.name.toLowerCase()
-        this.radius = parameters.radius ?? 5
+        this.radius = parameters.radius ?? 3
         this.widthSegments = parameters.widthSegments ?? 16
         this.heightSegments = parameters.heightSegments ?? 8
         this.color = new Color(parameters.color ?? Math.random() * 0xFFFFFF) 
         
         this.geometry = new SphereGeometry( this.radius, this.widthSegments, this.heightSegments )
-        this.material = new MeshStandardMaterial( { color: this.color } )
+        //this.material = new MeshStandardMaterial( { color: this.color } )
+        this.material = new MeshLambertMaterial( { color: this.color } )
         this.mesh = new Mesh( this.geometry, this.material )
             this.mesh.position.set( parameters.position.x, parameters.position.y, parameters.position.z )
-        this.label = new Label( this.name )
+        
+        this.label = new Label( this.name, "label vertex" )
             this.mesh.add( this.label.object )
-        console.log(`added new vertex named ${this.name}!`)
+        console.debug(`added new vertex named ${this.name}!`)
+        console.debug(this.mesh.position)
     }
     
     get position(): Vector3 {
@@ -141,24 +144,30 @@ class Edge {
 
     //drawCount: number
     readonly label: Label
-    readonly material: LineBasicMaterial
-    readonly lineGeometry: BufferGeometry
-    readonly lineMesh: Line
-    
+    readonly material: MeshLambertMaterial
+    lineGeometry: TubeGeometry
+    lineMesh: Mesh
+    path: LineCurve3
+    readonly tube: {radius: number, tubularSegments: number, radialSegments: number}
     constructor(parameters: EdgeParameters, id: number) {
-        this.id = id
         this.value = parameters.name
         this.source = Graph.getVertex(parameters.from)
         this.destination = Graph.getVertex(parameters.to)
-        this.label = new Label(this.value)
-        this.color = parameters.color ? parameters.color : new Color( Math.random() * 0xFFFFFF )
-        this.material = new LineBasicMaterial( { color: this.color } )
-        this.lineGeometry = new BufferGeometry()
-            // this.lineGeometry.name = id.toString()
-            // this.lineGeometry.attributes.position.needsUpdate = true
-            // this.drawCount = 2
-            // this.lineGeometry.setDrawRange( 0, this.drawCount )
-        this.lineMesh = new Line( this.lineGeometry, this.material )
+        this.color = parameters.color ?? this.source.color // new Color( Math.random() * 0xFFFFFF ) 
+
+        this.id = id
+        this.path = new LineCurve3( this.source.position, this.destination.position )
+        this.tube = {
+            radius: 0.25,
+            tubularSegments: 20,
+            radialSegments: 7
+        }
+        this.lineGeometry = new TubeGeometry( this.path,  this.tube.tubularSegments, this.tube.radius, this.tube.radialSegments, false )
+        this.material = new MeshLambertMaterial( { color: this.color })
+        this.lineMesh = new Mesh( this.lineGeometry, this.material )
+
+
+
         this.label = new Label( this.value )
             this.lineMesh.add( this.label.object )
     }
@@ -170,11 +179,7 @@ class Edge {
         if (to) {
             this.destination = Graph.getVertex(to)
         }
-        const points = []
-        points.push( this.source.mesh.position )
-        points.push( this.destination.mesh.position )
-        this.lineGeometry.setFromPoints( points )
-        this.label.object.position.lerpVectors( this.source.mesh.position, this.destination.mesh.position, 0.5 )
+        this.label.object.position.copy( this.path.getPointAt(0.5) )
     }
 
     // see buffer attributes example
@@ -188,9 +193,9 @@ class Edge {
 
 }
 class DirectedEdge extends Edge {
-    arrowGeometry: ConeGeometry
-    arrowMaterial: MeshStandardMaterial
-    arrowMesh: Mesh<ConeGeometry, MeshStandardMaterial>
+    readonly arrowGeometry: ConeGeometry
+    readonly arrowMaterial: MeshStandardMaterial
+    readonly arrowMesh: Mesh<ConeGeometry, MeshStandardMaterial>
     private readonly arrowRadius: number
     arrowLength: number
 
@@ -198,22 +203,55 @@ class DirectedEdge extends Edge {
         super(parameters, id)
         this.arrowRadius = 1
         this.arrowLength = 3;
+        // deal with this
+        // console.debug(`Path before operation:`)
+        // console.debug(this.path.v2)
+        //this.path.v2.add(new Vector3(0,10,0))
+        // const matrix = new Matrix4().makeScale(1,1,2).makeRotationFromEuler(new Euler(0.5, 0.6, 0, 'XYZ'))
+        // this.lineGeometry.applyMatrix4(matrix)
+        // console.debug(`Path after operation:`)
+        // console.debug(this.path.v2)
+
+        const binormal = this.path.computeFrenetFrames(3).binormals[1].setLength(3)
+        console.debug(`binormal vector for edge going from ${this.source.name} to ${this.destination.name}`)
+        console.debug(binormal)
+
         this.arrowGeometry = new ConeGeometry( this.arrowRadius, this.arrowLength, 7)
             this.arrowGeometry.translate( 0, (-this.arrowLength/2) - this.destination.radius, 0 )
-            this.arrowGeometry.rotateX( Math.PI/2 )
+            this.arrowGeometry.rotateX(-Math.PI/2)
+            //const matrix = new Matrix4().makeTranslation(1,3,2).makeRotationAxis()
         this.arrowMaterial = new MeshStandardMaterial( { color: this.color } )
         this.arrowMesh = new Mesh( this.arrowGeometry, this.arrowMaterial )
             this.arrowMesh.matrixAutoUpdate = false
-        this.lineMesh.attach(this.arrowMesh)
 
-        console.log(this)
+        this.path = new QuadraticBezierCurve3(
+            this.source.position.clone(),
+            // binormal vector converted to world coordinates
+            this.source.position.clone().lerp( this.destination.position, 0.5).add(binormal),
+            this.destination.position.clone()
+            )
+        this.lineGeometry.dispose()
+        this.lineGeometry = new TubeGeometry( this.path,  this.tube.tubularSegments, this.tube.radius, this.tube.radialSegments, false )
+        this.lineMesh.geometry.dispose()
+        this.lineMesh = new Mesh( this.lineGeometry, this.material )
+            this.lineMesh.attach(this.arrowMesh)
+            this.lineMesh.attach( this.label.object )
     }
     // GET POINT TO SHOW UP AND ANGLE ACCURATELY :)
     updateEdgePosition() {
         super.updateEdgePosition()
-
-        this.arrowMesh.matrix.lookAt( this.destination.position, this.source.position, DEFAULT_UP )
+        // arrow
+        //this.arrowMesh.matrix.lookAt( this.destination.position, this.source.position, DEFAULT_UP )
         this.arrowMesh.matrix.setPosition( this.destination.position )
+        this.arrowMesh.matrix.lookAt( 
+            this.path.getPointAt(0.85),
+            this.destination.position,
+            DEFAULT_UP
+        )
+
+        // tube
+
+
     }
 }
 class Label {
