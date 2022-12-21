@@ -11,6 +11,9 @@ general ui to do everything (change colors, randomize position, etc)
 
 custom family tree maker??????????????? like you can spawn in your own vertices/edges?????
 
+use Meshline plugin??? (https://github.com/spite/THREE.MeshLine)
+
+
 COMPLETED
 ------------------------
 convert data to json with node.js fs module
