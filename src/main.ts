@@ -1,4 +1,4 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, PointLight, Clock, GridHelper } from 'three'
+import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, PointLight, Clock, GridHelper, Vector2, Raycaster } from 'three'
 import './style.css'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { Graph } from "./Graph"
@@ -7,21 +7,41 @@ import WebGL from 'three/examples/jsm/capabilities/WebGL'
 let renderer: WebGLRenderer
 let scene: Scene
 let camera: PerspectiveCamera
+const pointer = new Vector2()
+const raycaster = new Raycaster()
 const manipulator = new Graph()
 const profiling = new Clock()
-let t = 0
-let delta = 0
-function avgDelta(extra: number) {
-  // const frames = 60
-  // delta += (extra * 1000)
-  // t++
-  // if (t > frames) {
-  //   delta /= frames
-  //   console.log(`Delta over ${frames} frames: ${delta} milliseconds`)
-  //   t = 0
-  //   delta = 0
-  // }
+// let t = 0
+// let delta = 0
+// function avgDelta(extra: number) {
+//   const frames = 60
+//   delta += (extra * 1000)
+//   t++
+//   if (t > frames) {
+//     delta /= frames
+//     console.log(`Delta over ${frames} frames: ${delta} milliseconds`)
+//     t = 0
+//     delta = 0
+//   }
+// }
+function onPointerDown(event: PointerEvent) {
+  // calculate pointer position in normalized device coordinates
+	// (-1 to +1) for both components
+  pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1
+  pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1
+
+  raycaster.setFromCamera( pointer, camera )
+  const intersects = raycaster.intersectObjects( scene.children, false )
+  intersects.forEach(i => {
+    // ensure vertex selected
+    if (!i.object.isObject3D) return
+    if (i.object.name === '') return
+    console.debug(Graph.getNeighborhood(i.object.name))
+
+  })
+  console.debug(intersects)
 }
+
 function init() {
   // performance monitoring
   
@@ -43,8 +63,8 @@ function init() {
 
   // scene
   scene = new Scene()
-  const grid = new GridHelper(100)
-  scene.add(grid)
+  // const grid = new GridHelper(100)
+  // scene.add(grid)
   // lighting
   const pointLight = new PointLight(0xFFFFFF)
     pointLight.position.set(20,20,20)
@@ -55,8 +75,8 @@ function init() {
   // graph
 
   // Graph.addVertex( {name: "alvin", position: { x:10, y:0, z:10} } )
-  // Graph.addVertex( {name: "simon", position: { x:-10, y:0, z:-10}})
-
+  // Graph.addVertex( {name: "simon", position: { x:-10, y:0, z:-10}} )
+  // Graph.addVertex( {name: "dave", position: {x: 20, y: 0, z: -10}} )
   // Graph.addEdge( {name: "brother", from: "simon", to: "alvin", directed: true} )
   Graph.importData(data)
   Graph.getVertices().forEach((vertex) => scene.add( vertex.mesh! ))
@@ -68,10 +88,8 @@ function animate() {
   profiling.start()
   requestAnimationFrame( animate )
   manipulator.labelRenderer.render( scene, camera )
-  //Graph.vertices.get("simon")!.mesh.position.set(Math.cos(t) * 20, Math.sin(t) * 20, 0)
 
-  avgDelta(profiling.getElapsedTime())
-  //Graph.getVertex("alvin").mesh.translateY(Math.cos(performance.now()/1000))
+  //avgDelta(profiling.getElapsedTime())
   profiling.stop()
   
   renderer.render( scene, camera )
@@ -84,7 +102,7 @@ window.addEventListener('resize', function() {
     manipulator.labelRenderer.setSize( window.innerWidth, window.innerHeight )
   }
 )
-
+window.addEventListener('pointerdown', onPointerDown)
 if ( WebGL.isWebGLAvailable() ) {
 	init()
 	animate()
