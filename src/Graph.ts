@@ -1,11 +1,18 @@
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
 import {
+    AnimationClip,
+    AnimationObjectGroup,
+    BufferGeometry,
     Color,
+    ColorKeyframeTrack,
     ConeGeometry,
+    Group,
+    InterpolateSmooth,
     LineCurve3,
     Mesh,
     MeshLambertMaterial,
     MeshStandardMaterial,
+    NumberKeyframeTrack,
     QuadraticBezierCurve3,
     SphereGeometry,
     TubeGeometry,
@@ -14,22 +21,26 @@ import {
 // up direction required for the arrow heads in directed edges to point in correct direction
 const DEFAULT_UP = new Vector3(0, 1, 0)
 
-
-
 class Graph {
+    static readonly VERTEX_LAYER = 1
+    static readonly EDGE_LAYER = 2
+    static readonly ENABLED_LAYER = 0
+    static readonly SELECTED_LAYER = 5
+
     readonly labelRenderer: CSS2DRenderer
     static readonly edges = new Map<string, Edge>()
     static readonly vertices = new Map<string, Vertex>()
-
+    static meshGroup = new Group()
+    static selectedNeighborhood = new Set<Vertex | Edge>()
+    static selectedElement= ""
     constructor() {
         this.labelRenderer = new CSS2DRenderer()
         this.labelRenderer.setSize(window.innerWidth, window.innerHeight)
         this.labelRenderer.domElement.id = 'labelRenderer'
         document.body.appendChild(this.labelRenderer.domElement)
-        
-        // document.addEventListener( 'pointerup', onPointerUp );
-        // document.addEventListener( 'pointermove', onPointerMove );
-        // ColorManagement.legacyMode = false;
+
+        Graph.meshGroup.name = "meshGroup"
+        Graph.meshGroup.layers.enableAll()
     }
 
     static addVertex(parameters: VertexParameters): void {
@@ -105,6 +116,38 @@ class Graph {
         return _
 
     }
+    /*
+    https://threejs.org/examples/?q=group#misc_animation_groups
+    static highlightNeighborhood(object: string, scene: Array, color?: Color): void {
+        const darkenKF = new NumberKeyframeTrack( '.material.opacity', [0, 1], [1, 0], InterpolateSmooth )
+        const brightenKF = new NumberKeyframeTrack( '.material.opacity', [0, 1], [0, 1], InterpolateSmooth )
+        const brightenClip = new AnimationClip( 'lighten', 1, [brightenKF])
+        const darkenClip = new AnimationClip( 'darken', 1, [darkenKF])
+        const neighborhoodGroup = new AnimationObjectGroup(...Graph.getNeighborhood(object))
+        const sceneGroup = new AnimationObjectGroup(...scene)
+        // add mixer, add clip action, add update in renderer
+        
+    }
+    */
+    // returns boolean stating whether or not it is a new selection
+    static selectNeighborhood(object: string): boolean {
+        if (!Graph.vertices.has(object)) throw new Error(`Invalid vertex name ${object}! Please only provide vertex names`)
+        // clear set
+        Graph.selectedNeighborhood.forEach((element) => {
+            element.disable(Graph.SELECTED_LAYER)
+            Graph.selectedNeighborhood.delete(element)
+        })
+        // turn off if you click the same person
+        console.debug(Graph.selectedElement !== object)
+        if (Graph.selectedElement === object) return false
+        Graph.selectedElement = object
+        const neighborhood = Graph.getNeighborhood(object)
+        neighborhood.forEach(element => {
+            Graph.selectedNeighborhood.add(element)
+            element.enable(Graph.SELECTED_LAYER)
+        })
+        return true
+    }
 
     // optimize this maybe
     static update(identifier?: string) {
@@ -160,10 +203,13 @@ class Vertex {
 
         this.geometry = new SphereGeometry(this.radius, this.widthSegments, this.heightSegments)
         //this.material = new MeshStandardMaterial( { color: this.color } )
-        this.material = new MeshLambertMaterial({ color: this.color })
+        this.material = new MeshLambertMaterial({ color: this.color, transparent: true })
         this.mesh = new Mesh(this.geometry, this.material)
             this.mesh.position.set(parameters.position.x, parameters.position.y, parameters.position.z)
             this.mesh.name = this.name
+            this.mesh.layers.enable(Graph.VERTEX_LAYER)
+            this.mesh.layers.enable(Graph.ENABLED_LAYER)
+            Graph.meshGroup.add(this.mesh)
         this.label = new Label(this.name, "label vertex")
         this.mesh.add(this.label.object)
         console.debug(`added new vertex named ${this.name}!`)
@@ -172,6 +218,19 @@ class Vertex {
 
     get position(): Vector3 {
         return this.mesh.position;
+    }
+    disable(layer?: number) {
+        if (typeof layer === 'undefined') {
+            this.mesh.layers.disableAll()
+            this.mesh.layers.disableAll()
+            return
+        }
+        this.mesh.layers.disable(layer)
+        this.label.object.layers.disable(layer)
+    }
+    enable(layer: number) {
+        this.mesh.layers.enable(layer)
+        this.label.object.layers.enable(layer)
     }
 }
 class Edge {
@@ -199,20 +258,18 @@ class Edge {
             tubularSegments: 20,
             radialSegments: 7
         }
+        this.material = new MeshLambertMaterial({ color: this.color, transparent: true })
         this.lineGeometry = new TubeGeometry(this.path, this.tube.tubularSegments, this.tube.radius, this.tube.radialSegments, false)
-        this.material = new MeshLambertMaterial({ color: this.color })
         this.lineMesh = new Mesh(this.lineGeometry, this.material)
-
-
-
-        this.label = new Label(this.value)
-        this.lineMesh.add(this.label.object)
+            this.lineMesh.layers.enable(Graph.EDGE_LAYER)
+            this.label = new Label(this.value)
+            this.lineMesh.add(this.label.object)
+            Graph.meshGroup.add(this.lineMesh)
     }
 
     get uuid() {
         return this.lineGeometry.uuid
     }
-
     updateEdgePosition(from?: string, to?: string) {
         if (from) {
             this.source = Graph.getVertex(from)
@@ -222,23 +279,25 @@ class Edge {
         }
         this.label.object.position.copy(this.path.getPointAt(0.5))
     }
-
-    // see buffer attributes example
-    /*newSetCoordinates(from: Vector3, to: Vector3) {
-        for (let i = 0; i < this.drawCount; i++) {
-            //this.lineGeometry.geometry.attributes.position.array[ index ++ ]
+    disable(layer?: number) {
+        if (typeof layer === 'undefined') {
+            this.lineMesh.layers.disableAll()
+            this.lineMesh.layers.disableAll()
+            return
         }
-        
-
-    }*/
-
+        this.lineMesh.layers.disable(layer)
+        this.label.object.layers.disable(layer)
+    }
+    enable(layer: number) {
+        this.lineMesh.layers.enable(layer)
+        this.label.object.layers.enable(layer)
+    }
 }
 class DirectedEdge extends Edge {
     readonly arrowGeometry: ConeGeometry
-    readonly arrowMaterial: MeshStandardMaterial
-    readonly arrowMesh: Mesh<ConeGeometry, MeshStandardMaterial>
+    readonly arrowMesh: Mesh<ConeGeometry, MeshLambertMaterial>
     private readonly arrowRadius: number
-    arrowLength: number
+    private readonly arrowLength: number
 
     constructor(parameters: EdgeParameters) {
         super(parameters)
@@ -261,9 +320,9 @@ class DirectedEdge extends Edge {
         this.arrowGeometry.translate(0, (-this.arrowLength / 2) - this.target.radius, 0)
         this.arrowGeometry.rotateX(-Math.PI / 2)
         //const matrix = new Matrix4().makeTranslation(1,3,2).makeRotationAxis()
-        this.arrowMaterial = new MeshStandardMaterial({ color: this.color })
-        this.arrowMesh = new Mesh(this.arrowGeometry, this.arrowMaterial)
+        this.arrowMesh = new Mesh(this.arrowGeometry, this.material)
         this.arrowMesh.matrixAutoUpdate = false
+        this.arrowMesh.layers.enable(Graph.EDGE_LAYER)
 
         this.path = new QuadraticBezierCurve3(
             this.source.position.clone(),
@@ -271,12 +330,15 @@ class DirectedEdge extends Edge {
             this.source.position.clone().lerp(this.target.position, 0.5).add(binormal),
             this.target.position.clone()
         )
+        Graph.meshGroup.remove(this.lineMesh)
         this.lineGeometry.dispose()
-        this.lineGeometry = new TubeGeometry(this.path, this.tube.tubularSegments, this.tube.radius, this.tube.radialSegments, false)
+            this.lineGeometry = new TubeGeometry(this.path, this.tube.tubularSegments, this.tube.radius, this.tube.radialSegments, false)
         this.lineMesh.geometry.dispose()
         this.lineMesh = new Mesh(this.lineGeometry, this.material)
-        this.lineMesh.attach(this.arrowMesh)
-        this.lineMesh.attach(this.label.object)
+            this.lineMesh.layers.enable(Graph.EDGE_LAYER)
+            this.lineMesh.attach(this.arrowMesh)
+            this.lineMesh.attach(this.label.object)
+            Graph.meshGroup.add(this.lineMesh)
     }
     // GET POINT TO SHOW UP AND ANGLE ACCURATELY :)
     updateEdgePosition() {
@@ -294,6 +356,19 @@ class DirectedEdge extends Edge {
 
 
     }
+    disable(layer?: number) {
+        super.disable(layer)
+        if (typeof layer === 'undefined') {
+            this.arrowMesh.layers.disableAll()
+            return
+        }
+        this.arrowMesh.layers.disable(layer)
+    }
+    enable(layer: number) {
+        super.enable(layer)
+        this.arrowMesh.layers.enable(layer)
+
+    }
 }
 class Label {
     element: HTMLDivElement
@@ -302,8 +377,8 @@ class Label {
     // textDiv.textContent = 'hello testing'
     constructor(content: string, className?: string) {
         this.element = document.createElement('div')
-        this.element.className = className ? className : 'label'
-        this.element.textContent = content ? content : 'Empty'
+        this.element.className = className ?? 'label'
+        this.element.textContent = content ?? 'Empty'
         this.object = new CSS2DObject(this.element)
     }
 }
@@ -338,7 +413,8 @@ interface ImportDataParameters {
     position?: Vector3Parameters
 }
 export {
-    Graph
+    Graph,
+    Vertex
 }
 
 /*

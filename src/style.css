@@ -24,3 +24,8 @@ canvas {
   left: 0px;
   pointer-events: none;
 }
+
+.hidden {
+  color: transparent !important;
+  background-color: transparent !important;
+}
