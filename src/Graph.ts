@@ -408,6 +408,5 @@ interface ImportDataParameters {
 }
 
 export {
-    Graph,
-    Vertex
+    Graph
 }

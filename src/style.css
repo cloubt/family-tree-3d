@@ -1,31 +1,31 @@
 canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-.label {
-  color: #FFF;
-  font-family: sans-serif;
-  padding: 2px;
-  background: rgba( 0, 0, 0, .6 );
-  font-size: 14px;
-  border-radius: 8px;
-}
-
-.vertex {
-  font-size: 28px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-#labelRenderer {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  pointer-events: none;
-}
-
-.hidden {
-  color: transparent !important;
-  background-color: transparent !important;
-}
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  
+  .label {
+    color: #FFF;
+    font-family: sans-serif;
+    padding: 2px;
+    background: rgba( 0, 0, 0, .6 );
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  
+  .vertex {
+    font-size: 28px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  #labelRenderer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    pointer-events: none;
+  }
+  
+  .hidden {
+    color: transparent !important;
+    background-color: transparent !important;
+  }
