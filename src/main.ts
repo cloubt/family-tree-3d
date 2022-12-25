@@ -1,4 +1,4 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, PointLight, Clock, GridHelper, Vector2, Raycaster, Mesh } from 'three'
+import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, PointLight, Vector2, Raycaster } from 'three'
 import './style.css'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { Graph } from "./Graph"
@@ -10,7 +10,7 @@ let camera: PerspectiveCamera
 const pointer = new Vector2()
 const raycaster = new Raycaster()
 const manipulator = new Graph()
-const profiling = new Clock()
+//const profiling = new Clock()
 // let t = 0
 // let delta = 0
 // function avgDelta(extra: number) {
@@ -101,12 +101,12 @@ function init() {
   controls.update()
 }
 function animate() {
-  profiling.start()
+  //profiling.start()
   requestAnimationFrame( animate )
   manipulator.labelRenderer.render( scene, camera )
 
   //avgDelta(profiling.getElapsedTime())
-  profiling.stop()
+  //profiling.stop()
   
   renderer.render( scene, camera )
 }

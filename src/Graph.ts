@@ -1,18 +1,11 @@
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
 import {
-    AnimationClip,
-    AnimationObjectGroup,
-    BufferGeometry,
     Color,
-    ColorKeyframeTrack,
     ConeGeometry,
     Group,
-    InterpolateSmooth,
     LineCurve3,
     Mesh,
     MeshLambertMaterial,
-    MeshStandardMaterial,
-    NumberKeyframeTrack,
     QuadraticBezierCurve3,
     SphereGeometry,
     TubeGeometry,
@@ -20,6 +13,9 @@ import {
 } from 'three'
 // up direction required for the arrow heads in directed edges to point in correct direction
 const DEFAULT_UP = new Vector3(0, 1, 0)
+function capitalize(string: string) {
+    return string.at(0)?.toUpperCase() + string.slice(1)
+}
 
 class Graph {
     static readonly VERTEX_LAYER = 1
@@ -44,7 +40,8 @@ class Graph {
     }
 
     static addVertex(parameters: VertexParameters): void {
-        Graph.vertices.set(parameters.name, new Vertex(parameters))
+        Graph.vertices.set( parameters.name, new Vertex(parameters) )
+        //const vertex = Graph.getVertex( parameters.name )
     }
     static addEdge(parameters: EdgeParameters): void {
         // create
@@ -130,6 +127,7 @@ class Graph {
     }
     */
     // returns boolean stating whether or not it is a new selection
+    
     static selectNeighborhood(object: string): boolean {
         if (!Graph.vertices.has(object)) throw new Error(`Invalid vertex name ${object}! Please only provide vertex names`)
         // clear set
@@ -161,8 +159,8 @@ class Graph {
     static importData(elements: ImportDataParameters[]): any {
         elements.forEach((element: ImportDataParameters) => {
             if (element.data === "vertex") {
-                Graph.vertices.set(element.name, new Vertex({
-                    name: element.name,
+                Graph.vertices.set(element.name.toLowerCase(), new Vertex({
+                    name: element.name.toLowerCase(),
                     position: new Vector3().randomDirection().setLength(50)
                 }))
             } else if (element.data === "edge") {
@@ -170,9 +168,9 @@ class Graph {
                     || typeof element.from === "undefined"
                     || typeof element.directed === "undefined") throw new Error(`Edge ${element.name} had malformed source and/or target vertices!`)
                 Graph.addEdge({
-                    name: element.name,
-                    from: element.from,
-                    to: element.to,
+                    name: element.name.toLowerCase(),
+                    from: element.from.toLowerCase(),
+                    to: element.to.toLowerCase(),
                     directed: element.directed
                 })
             } else {
@@ -250,7 +248,7 @@ class Edge {
         this.value = parameters.name
         this.source = Graph.getVertex(parameters.from)
         this.target = Graph.getVertex(parameters.to)
-        this.color = parameters.color ?? this.source.color // new Color( Math.random() * 0xFFFFFF ) 
+        this.color = parameters.color ?? new Color( Math.random() * 0xFFFFFF ) // this.source.color //
 
         this.path = new LineCurve3(this.source.position, this.target.position)
         this.tube = {
@@ -277,7 +275,7 @@ class Edge {
         if (to) {
             this.target = Graph.getVertex(to)
         }
-        this.label.object.position.copy(this.path.getPointAt(0.5))
+        this.label.object.position.copy(this.path.getPointAt(0.45))
     }
     disable(layer?: number) {
         if (typeof layer === 'undefined') {
@@ -302,7 +300,9 @@ class DirectedEdge extends Edge {
     constructor(parameters: EdgeParameters) {
         super(parameters)
         this.arrowRadius = 1
-        this.arrowLength = 3;
+        this.arrowLength = 3
+        this.color = this.source.color
+        this.material.color.set( this.color )
         // deal with this
         // console.debug(`Path before operation:`)
         // console.debug(this.path.v2)
@@ -311,7 +311,6 @@ class DirectedEdge extends Edge {
         // this.lineGeometry.applyMatrix4(matrix)
         // console.debug(`Path after operation:`)
         // console.debug(this.path.v2)
-
         const binormal = this.path.computeFrenetFrames(3).binormals[1].setLength(3)
         console.debug(`binormal vector for edge going from ${this.source.name} to ${this.target.name}`)
         console.debug(binormal)
@@ -334,7 +333,7 @@ class DirectedEdge extends Edge {
         this.lineGeometry.dispose()
             this.lineGeometry = new TubeGeometry(this.path, this.tube.tubularSegments, this.tube.radius, this.tube.radialSegments, false)
         this.lineMesh.geometry.dispose()
-        this.lineMesh = new Mesh(this.lineGeometry, this.material)
+            this.lineMesh = new Mesh(this.lineGeometry, this.material)
             this.lineMesh.layers.enable(Graph.EDGE_LAYER)
             this.lineMesh.attach(this.arrowMesh)
             this.lineMesh.attach(this.label.object)
@@ -344,17 +343,12 @@ class DirectedEdge extends Edge {
     updateEdgePosition() {
         super.updateEdgePosition()
         // arrow
-        //this.arrowMesh.matrix.lookAt( this.target.position, this.source.position, DEFAULT_UP )
         this.arrowMesh.matrix.setPosition(this.target.position)
         this.arrowMesh.matrix.lookAt(
             this.path.getPointAt(0.85),
             this.target.position,
             DEFAULT_UP
         )
-
-        // tube
-
-
     }
     disable(layer?: number) {
         super.disable(layer)
@@ -378,7 +372,7 @@ class Label {
     constructor(content: string, className?: string) {
         this.element = document.createElement('div')
         this.element.className = className ?? 'label'
-        this.element.textContent = content ?? 'Empty'
+        this.element.textContent = capitalize(content) ?? 'Empty'
         this.object = new CSS2DObject(this.element)
     }
 }
@@ -412,17 +406,8 @@ interface ImportDataParameters {
     color?: Color
     position?: Vector3Parameters
 }
+
 export {
     Graph,
     Vertex
 }
-
-/*
-    {
-        "data": "edge",
-        "name": "servant",
-        "from": "tristan",
-        "to": "cj",
-        "directed": true
-    },
-    */

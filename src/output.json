@@ -1,15 +1,27 @@
 [
     {
         "data": "vertex",
-        "name": "ryan"
+        "name": "mike"
     },
     {
         "data": "vertex",
-        "name": "tyler"
+        "name": "jack"
     },
     {
         "data": "vertex",
-        "name": "austin"
+        "name": "keegan"
+    },
+    {
+        "data": "vertex",
+        "name": "noah"
+    },
+    {
+        "data": "vertex",
+        "name": "ethan"
+    },
+    {
+        "data": "vertex",
+        "name": "addy"
     },
     {
         "data": "vertex",
@@ -17,7 +29,7 @@
     },
     {
         "data": "vertex",
-        "name": "katie"
+        "name": "cj"
     },
     {
         "data": "vertex",
@@ -29,19 +41,7 @@
     },
     {
         "data": "vertex",
-        "name": "addy"
-    },
-    {
-        "data": "vertex",
-        "name": "garrett"
-    },
-    {
-        "data": "vertex",
-        "name": "noah"
-    },
-    {
-        "data": "vertex",
-        "name": "anna"
+        "name": "tyler"
     },
     {
         "data": "vertex",
@@ -49,31 +49,7 @@
     },
     {
         "data": "vertex",
-        "name": "cj"
-    },
-    {
-        "data": "vertex",
-        "name": "jack"
-    },
-    {
-        "data": "vertex",
-        "name": "jack"
-    },
-    {
-        "data": "vertex",
-        "name": "keegan"
-    },
-    {
-        "data": "vertex",
-        "name": "ethan"
-    },
-    {
-        "data": "vertex",
-        "name": "noah"
-    },
-    {
-        "data": "vertex",
-        "name": "mike"
+        "name": "anna"
     },
     {
         "data": "vertex",
@@ -81,130 +57,51 @@
     },
     {
         "data": "vertex",
-        "name": "jesse"
+        "name": "garrett"
     },
     {
         "data": "vertex",
-        "name": "keegan"
+        "name": "katie"
     },
     {
-        "data": "edge",
-        "name": "siblings",
-        "from": "ryan",
-        "to": "austin",
-        "directed": false
+        "data": "vertex",
+        "name": "ryan"
     },
     {
-        "data": "edge",
-        "name": "sex friends",
-        "from": "ryan",
-        "to": "keegan",
-        "directed": false
+        "data": "vertex",
+        "name": "austin"
     },
     {
-        "data": "edge",
-        "name": "siblings",
-        "from": "addy",
-        "to": "steven",
-        "directed": false
+        "data": "vertex",
+        "name": "jesse"
     },
     {
         "data": "edge",
         "name": "father",
-        "from": "ryan",
-        "to": "katie",
+        "from": "cj",
+        "to": "noah",
         "directed": true
     },
     {
         "data": "edge",
-        "name": "son",
-        "from": "noah",
+        "name": "daughter",
+        "from": "keegan",
         "to": "cj",
         "directed": true
     },
     {
         "data": "edge",
-        "name": "sex friends",
+        "name": "siblings",
         "from": "ryan",
-        "to": "christina",
+        "to": "tyler",
         "directed": false
     },
     {
         "data": "edge",
-        "name": "never met",
-        "from": "ryan",
-        "to": "jesse",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "noah",
-        "to": "mike",
+        "name": "daughter",
+        "from": "katie",
+        "to": "ryan",
         "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "noah",
-        "to": "austin",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "father",
-        "from": "ryan",
-        "to": "joey",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "father",
-        "from": "ryan",
-        "to": "garrett",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "ryan",
-        "to": "ethan",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "friends",
-        "from": "tristan",
-        "to": "joey",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "keegan",
-        "to": "anna",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "friends",
-        "from": "garrett",
-        "to": "jack",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "son",
-        "from": "tristan",
-        "to": "keegan",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "married",
-        "from": "tristan",
-        "to": "mike",
-        "directed": false
     },
     {
         "data": "edge",
@@ -215,37 +112,30 @@
     },
     {
         "data": "edge",
-        "name": "son",
-        "from": "noah",
-        "to": "jack",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "cj",
-        "to": "tristan",
-        "directed": true
+        "name": "siblings",
+        "from": "ryan",
+        "to": "austin",
+        "directed": false
     },
     {
         "data": "edge",
         "name": "friends",
-        "from": "keegan",
+        "from": "noah",
         "to": "ethan",
         "directed": false
     },
     {
         "data": "edge",
-        "name": "servant",
-        "from": "tyler",
-        "to": "noah",
+        "name": "master",
+        "from": "addy",
+        "to": "ethan",
         "directed": true
     },
     {
         "data": "edge",
         "name": "father",
-        "from": "cj",
-        "to": "keegan",
+        "from": "ryan",
+        "to": "garrett",
         "directed": true
     },
     {
@@ -257,58 +147,9 @@
     },
     {
         "data": "edge",
-        "name": "friends",
-        "from": "tristan",
-        "to": "katie",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "addy",
-        "to": "lawson",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "servant",
-        "from": "ethan",
-        "to": "ryan",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "son",
-        "from": "joey",
-        "to": "ryan",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "father",
-        "from": "jack",
-        "to": "noah",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "father",
-        "from": "jack",
-        "to": "noah",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "keegan",
-        "to": "tyler",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "married",
-        "from": "tristan",
-        "to": "austin",
+        "name": "never met",
+        "from": "ryan",
+        "to": "jesse",
         "directed": false
     },
     {
@@ -317,104 +158,6 @@
         "from": "noah",
         "to": "garrett",
         "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "brother",
-        "from": "noah",
-        "to": "keegan",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "servant",
-        "from": "mike",
-        "to": "noah",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "servant",
-        "from": "lawson",
-        "to": "ryan",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "siblings",
-        "from": "addy",
-        "to": "austin",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "married",
-        "from": "noah",
-        "to": "anna",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "father",
-        "from": "noah",
-        "to": "tristan",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "father",
-        "from": "addy",
-        "to": "garrett",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "father",
-        "from": "keegan",
-        "to": "tristan",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "married",
-        "from": "noah",
-        "to": "joey",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "son",
-        "from": "tristan",
-        "to": "christina",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "friends",
-        "from": "noah",
-        "to": "ethan",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "servant",
-        "from": "lawson",
-        "to": "addy",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "siblings",
-        "from": "addy",
-        "to": "tyler",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "servant",
-        "from": "austin",
-        "to": "noah",
-        "directed": true
     },
     {
         "data": "edge",
@@ -425,16 +168,51 @@
     },
     {
         "data": "edge",
-        "name": "father",
-        "from": "jack",
-        "to": "keegan",
+        "name": "master",
+        "from": "ryan",
+        "to": "ethan",
         "directed": true
     },
     {
         "data": "edge",
+        "name": "servant",
+        "from": "ethan",
+        "to": "addy",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "keegan",
+        "to": "austin",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "son",
+        "from": "joey",
+        "to": "addy",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "siblings",
+        "from": "addy",
+        "to": "austin",
+        "directed": false
+    },
+    {
+        "data": "edge",
         "name": "friends",
-        "from": "noah",
-        "to": "lawson",
+        "from": "garrett",
+        "to": "jack",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "brothers",
+        "from": "tyler",
+        "to": "jesse",
         "directed": false
     },
     {
@@ -446,57 +224,71 @@
     },
     {
         "data": "edge",
-        "name": "siblings",
-        "from": "noah",
+        "name": "sex friends",
+        "from": "ryan",
         "to": "christina",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "mother",
-        "from": "addy",
-        "to": "joey",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "servant",
-        "from": "steven",
-        "to": "noah",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "mother",
-        "from": "addy",
-        "to": "garrett",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "married",
-        "from": "keegan",
-        "to": "garrett",
         "directed": false
     },
     {
         "data": "edge",
         "name": "son",
         "from": "joey",
-        "to": "addy",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "noah",
-        "to": "steven",
+        "to": "ryan",
         "directed": true
     },
     {
         "data": "edge",
         "name": "son",
         "from": "noah",
+        "to": "jack",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "friends",
+        "from": "keegan",
+        "to": "ethan",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "noah",
+        "to": "mike",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "keegan",
+        "to": "anna",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "married",
+        "from": "noah",
+        "to": "joey",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "son",
+        "from": "tristan",
+        "to": "christina",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "sex friends",
+        "from": "ryan",
+        "to": "keegan",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "daughter",
+        "from": "keegan",
         "to": "jack",
         "directed": true
     },
@@ -509,16 +301,16 @@
     },
     {
         "data": "edge",
-        "name": "servant",
-        "from": "tyler",
-        "to": "keegan",
+        "name": "mother",
+        "from": "addy",
+        "to": "garrett",
         "directed": true
     },
     {
         "data": "edge",
-        "name": "never met :(",
-        "from": "joey",
-        "to": "mike",
+        "name": "friends",
+        "from": "tristan",
+        "to": "joey",
         "directed": false
     },
     {
@@ -530,6 +322,13 @@
     },
     {
         "data": "edge",
+        "name": "never met :(",
+        "from": "tristan",
+        "to": "lawson",
+        "directed": false
+    },
+    {
+        "data": "edge",
         "name": "son",
         "from": "garrett",
         "to": "addy",
@@ -545,43 +344,8 @@
     {
         "data": "edge",
         "name": "father",
-        "from": "christina",
-        "to": "tristan",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "never met :(",
-        "from": "tristan",
-        "to": "lawson",
-        "directed": false
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "ryan",
-        "to": "lawson",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "servant",
-        "from": "ethan",
-        "to": "addy",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "son",
-        "from": "keegan",
-        "to": "jack",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "father",
-        "from": "cj",
-        "to": "noah",
+        "from": "jack",
+        "to": "keegan",
         "directed": true
     },
     {
@@ -593,16 +357,79 @@
     },
     {
         "data": "edge",
-        "name": "daughter",
-        "from": "katie",
-        "to": "ryan",
+        "name": "son",
+        "from": "garrett",
+        "to": "addy",
         "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "servant",
+        "from": "mike",
+        "to": "noah",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "father",
+        "from": "addy",
+        "to": "garrett",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "servant",
+        "from": "anna",
+        "to": "keegan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "father",
+        "from": "keegan",
+        "to": "tristan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "never met :(",
+        "from": "joey",
+        "to": "mike",
+        "directed": false
     },
     {
         "data": "edge",
         "name": "married",
         "from": "tristan",
-        "to": "steven",
+        "to": "austin",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "servant",
+        "from": "steven",
+        "to": "noah",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "servant",
+        "from": "tristan",
+        "to": "cj",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "siblings",
+        "from": "keegan",
+        "to": "noah",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "siblings",
+        "from": "noah",
+        "to": "christina",
         "directed": false
     },
     {
@@ -614,66 +441,129 @@
     },
     {
         "data": "edge",
-        "name": "sister",
-        "from": "keegan",
+        "name": "servant",
+        "from": "austin",
         "to": "noah",
         "directed": true
     },
     {
         "data": "edge",
-        "name": "siblings",
+        "name": "mother",
+        "from": "christina",
+        "to": "tristan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "father",
+        "from": "jack",
+        "to": "noah",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "father",
         "from": "ryan",
+        "to": "katie",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "servant",
+        "from": "ethan",
+        "to": "ryan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "siblings",
+        "from": "addy",
         "to": "tyler",
         "directed": false
     },
     {
         "data": "edge",
         "name": "servant",
-        "from": "tristan",
-        "to": "cj",
+        "from": "tyler",
+        "to": "noah",
         "directed": true
     },
     {
         "data": "edge",
         "name": "son",
-        "from": "garrett",
-        "to": "addy",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "master",
-        "from": "keegan",
-        "to": "austin",
-        "directed": true
-    },
-    {
-        "data": "edge",
-        "name": "daughte",
-        "from": "keegan",
+        "from": "noah",
         "to": "cj",
         "directed": true
     },
     {
         "data": "edge",
-        "name": "master",
-        "from": "noah",
-        "to": "tyler",
+        "name": "father",
+        "from": "ryan",
+        "to": "joey",
         "directed": true
     },
     {
         "data": "edge",
-        "name": "brothers",
-        "from": "tyler",
-        "to": "jesse",
+        "name": "friends",
+        "from": "tristan",
+        "to": "katie",
         "directed": false
     },
     {
         "data": "edge",
-        "name": "master",
-        "from": "addy",
-        "to": "ethan",
+        "name": "son",
+        "from": "noah",
+        "to": "jack",
         "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "siblings",
+        "from": "addy",
+        "to": "steven",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "father",
+        "from": "noah",
+        "to": "tristan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "mother",
+        "from": "addy",
+        "to": "joey",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "father",
+        "from": "cj",
+        "to": "keegan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "married",
+        "from": "tristan",
+        "to": "mike",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "friends",
+        "from": "noah",
+        "to": "lawson",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "married",
+        "from": "keegan",
+        "to": "garrett",
+        "directed": false
     },
     {
         "data": "edge",
@@ -685,8 +575,99 @@
     {
         "data": "edge",
         "name": "servant",
-        "from": "anna",
+        "from": "lawson",
+        "to": "ryan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "married",
+        "from": "noah",
+        "to": "anna",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "noah",
+        "to": "tyler",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "noah",
+        "to": "austin",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "son",
+        "from": "tristan",
         "to": "keegan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "cj",
+        "to": "tristan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "noah",
+        "to": "steven",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "married",
+        "from": "tristan",
+        "to": "steven",
+        "directed": false
+    },
+    {
+        "data": "edge",
+        "name": "servant",
+        "from": "tyler",
+        "to": "keegan",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "father",
+        "from": "jack",
+        "to": "noah",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "keegan",
+        "to": "tyler",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "servant",
+        "from": "lawson",
+        "to": "addy",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "addy",
+        "to": "lawson",
+        "directed": true
+    },
+    {
+        "data": "edge",
+        "name": "master",
+        "from": "ryan",
+        "to": "lawson",
         "directed": true
     }
 ]
