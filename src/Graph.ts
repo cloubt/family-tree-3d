@@ -1,5 +1,6 @@
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
 import {
+    Sphere,
     Color,
     ConeGeometry,
     Group,
@@ -157,11 +158,33 @@ class Graph {
     }
 
     static importData(elements: ImportDataParameters[]): any {
+        const collBoxRadius = 20
+        
         elements.forEach((element: ImportDataParameters) => {
+
             if (element.data === "vertex") {
+                //collision checking
+                let pos: Vector3
+                while (true) {
+                    pos = new Vector3().randomDirection().setLength(50)
+                    const sphere = new Sphere(pos, collBoxRadius)
+                    const set = new Set()
+                    // check all instances for collision
+                    // i wish there was a way to break if the set gets added to but idk how to do that
+                    Graph.vertices.forEach(element => {
+                        const elementSphere = new Sphere(element.position, element.radius)
+                        if (sphere.intersectsSphere(elementSphere)) {
+                            set.add(element)
+                        }
+                    })
+                    if (set.size === 0) break
+                    console.debug(`failed to add vertex ${element.name}, retrying...`)
+                }
+
+
                 Graph.vertices.set(element.name.toLowerCase(), new Vertex({
                     name: element.name.toLowerCase(),
-                    position: new Vector3().randomDirection().setLength(50)
+                    position: pos
                 }))
             } else if (element.data === "edge") {
                 if (typeof element.to === "undefined"
@@ -211,7 +234,7 @@ class Vertex {
         this.label = new Label(this.name, "label vertex")
         this.mesh.add(this.label.object)
         console.debug(`added new vertex named ${this.name}!`)
-        console.debug(this.mesh.position)
+        console.debug(this)
     }
 
     get position(): Vector3 {
@@ -312,8 +335,8 @@ class DirectedEdge extends Edge {
         // console.debug(`Path after operation:`)
         // console.debug(this.path.v2)
         const binormal = this.path.computeFrenetFrames(3).binormals[1].setLength(3)
-        console.debug(`binormal vector for edge going from ${this.source.name} to ${this.target.name}`)
-        console.debug(binormal)
+        // console.debug(`binormal vector for edge going from ${this.source.name} to ${this.target.name}`)
+        // console.debug(binormal)
 
         this.arrowGeometry = new ConeGeometry(this.arrowRadius, this.arrowLength, 7)
         this.arrowGeometry.translate(0, (-this.arrowLength / 2) - this.target.radius, 0)

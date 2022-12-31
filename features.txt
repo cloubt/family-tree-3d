@@ -6,15 +6,19 @@ animate neighborhood selection (this would take a LOT of work)
 relation selector (when edge clicked make all others transparent)
 
 general ui to do everything (change colors, randomize position, etc)
+    -specific node selection: when clicked, gui populates with selected node and you can edit it
+    -relations tab where you can enable/disable certain edges from showing up (e.g. only show married and friends, only siblings, etc)
 
 custom family tree maker??????????????? like you can spawn in your own vertices/edges?????
 
 use Meshline plugin??? (https://github.com/spite/THREE.MeshLine) or convert them to mesh??
 
-make it so that vertices never spawn too close to each other (adjust bouding boxes during spawn and check for collisions?)
+
 
 COMPLETED
 ------------------------
+make it so that vertices never spawn too close to each other (adjust bouding boxes during spawn and check for collisions?)
+
 convert data to json with node.js fs module
     do this already...
     import into main
