@@ -1,5 +1,5 @@
 import { Scene, PerspectiveCamera, WebGLRenderer, AmbientLight, PointLight, Vector2, Raycaster } from 'three'
-import './style.css?inline'
+import './style.css'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { Graph } from "./Graph"
 import data from './output.json' assert {type: 'json'}
