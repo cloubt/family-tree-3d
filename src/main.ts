@@ -66,6 +66,7 @@ function init() {
   const canvas = document.querySelector('#main')!
   renderer = new WebGLRenderer({
     canvas,
+    antialias: true
   })
     renderer.setSize( window.innerWidth, window.innerHeight )
     renderer.setPixelRatio( window.devicePixelRatio )
