@@ -26,9 +26,9 @@ const manipulator = new Graph()
 // }
 function debug(state: boolean) {
   if (state) {
-    Graph.addVertex( {name: "alvin", position: { x:10, y:0, z:10} } )
-    Graph.addVertex( {name: "simon", position: { x:-10, y:0, z:-10}} )
-    Graph.addVertex( {name: "dave", position: {x: 20, y: 0, z: -10}} )
+    Graph.addVertex( {name: "alvin", position: { x:100, y:0, z:100} } )
+    Graph.addVertex( {name: "simon", position: { x:-100, y:0, z:-100}} )
+    Graph.addVertex( {name: "dave", position: {x: 200, y: 0, z: -100}} )
     Graph.addEdge( {name: "brother", from: "simon", to: "alvin", directed: true} )
   } else {
     Graph.importData(data)
@@ -73,7 +73,7 @@ function init() {
 
   // camera
   camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 )
-    camera.position.set( 0, 50, 80 )
+    camera.position.set( 0, 170, 170 )
     camera.lookAt( 0, 0, 0 )
     camera.layers.set(Graph.ENABLED_LAYER)
   // camera controls

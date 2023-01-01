@@ -2,7 +2,8 @@ make vertices moveable (use coordinate thing from spline example)
     add texture to vertices?
 
 animate neighborhood selection (this would take a LOT of work)
-
+    -maybe not if you figure out how to use tween
+    
 relation selector (when edge clicked make all others transparent)
 
 general ui to do everything (change colors, randomize position, etc)

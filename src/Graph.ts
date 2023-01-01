@@ -1,4 +1,3 @@
-import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer"
 import {
     Sphere,
     Color,
@@ -12,6 +11,7 @@ import {
     TubeGeometry,
     Vector3
 } from 'three'
+import { CSS3DRenderer, CSS3DSprite } from 'three/examples/jsm/renderers/CSS3DRenderer.js'
 // up direction required for the arrow heads in directed edges to point in correct direction
 const DEFAULT_UP = new Vector3(0, 1, 0)
 function capitalize(string: string) {
@@ -24,14 +24,14 @@ class Graph {
     static readonly ENABLED_LAYER = 0
     static readonly SELECTED_LAYER = 5
 
-    readonly labelRenderer: CSS2DRenderer
+    readonly labelRenderer: CSS3DRenderer
     static readonly edges = new Map<string, Edge>()
     static readonly vertices = new Map<string, Vertex>()
     static meshGroup = new Group()
     static selectedNeighborhood = new Set<Vertex | Edge>()
     static selectedElement= ""
     constructor() {
-        this.labelRenderer = new CSS2DRenderer()
+        this.labelRenderer = new CSS3DRenderer()
         this.labelRenderer.setSize(window.innerWidth, window.innerHeight)
         this.labelRenderer.domElement.id = 'labelRenderer'
         document.body.appendChild(this.labelRenderer.domElement)
@@ -158,7 +158,7 @@ class Graph {
     }
 
     static importData(elements: ImportDataParameters[]): any {
-        const collBoxRadius = 20
+        const collBoxRadius = 80
         
         elements.forEach((element: ImportDataParameters) => {
 
@@ -166,7 +166,7 @@ class Graph {
                 //collision checking
                 let pos: Vector3
                 while (true) {
-                    pos = new Vector3().randomDirection().setLength(50)
+                    pos = new Vector3().randomDirection().setLength(150)
                     const sphere = new Sphere(pos, collBoxRadius)
                     const set = new Set()
                     // check all instances for collision
@@ -217,7 +217,7 @@ class Vertex {
 
     constructor(parameters: VertexParameters) {
         this.name = parameters.name.toLowerCase()
-        this.radius = parameters.radius ?? 3
+        this.radius = parameters.radius ?? 10
         this.widthSegments = parameters.widthSegments ?? 16
         this.heightSegments = parameters.heightSegments ?? 8
         this.color = new Color(parameters.color ?? Math.random() * 0xFFFFFF)
@@ -275,7 +275,7 @@ class Edge {
 
         this.path = new LineCurve3(this.source.position, this.target.position)
         this.tube = {
-            radius: 0.25,
+            radius: .75,
             tubularSegments: 20,
             radialSegments: 7
         }
@@ -319,11 +319,11 @@ class DirectedEdge extends Edge {
     readonly arrowMesh: Mesh<ConeGeometry, MeshLambertMaterial>
     private readonly arrowRadius: number
     private readonly arrowLength: number
-
+    private readonly separation = 10
     constructor(parameters: EdgeParameters) {
         super(parameters)
-        this.arrowRadius = 1
-        this.arrowLength = 3
+        this.arrowRadius = 3
+        this.arrowLength = 9
         this.color = this.source.color
         this.material.color.set( this.color )
         // deal with this
@@ -334,7 +334,7 @@ class DirectedEdge extends Edge {
         // this.lineGeometry.applyMatrix4(matrix)
         // console.debug(`Path after operation:`)
         // console.debug(this.path.v2)
-        const binormal = this.path.computeFrenetFrames(3).binormals[1].setLength(3)
+        const binormal = this.path.computeFrenetFrames(3).binormals[1].setLength(this.separation)
         // console.debug(`binormal vector for edge going from ${this.source.name} to ${this.target.name}`)
         // console.debug(binormal)
 
@@ -389,14 +389,13 @@ class DirectedEdge extends Edge {
 }
 class Label {
     element: HTMLDivElement
-    object: CSS2DObject
-    // textDiv.className = 'label'
-    // textDiv.textContent = 'hello testing'
+    object: CSS3DSprite
     constructor(content: string, className?: string) {
         this.element = document.createElement('div')
         this.element.className = className ?? 'label'
         this.element.textContent = capitalize(content) ?? 'Empty'
-        this.object = new CSS2DObject(this.element)
+        this.object = new CSS3DSprite(this.element)
+            this.object.element.style.pointerEvents = 'none'
     }
 }
 
