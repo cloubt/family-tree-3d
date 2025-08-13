@@ -140,10 +140,10 @@ window.addEventListener("resize", function () {
   manipulator.labelRenderer.setSize(window.innerWidth, window.innerHeight);
 });
 window.addEventListener("pointerdown", onPointerDown);
-if (WebGL.isWebGLAvailable()) {
+if (WebGL.isWebGL2Available()) {
   init();
   animate();
 } else {
-  const warning = WebGL.getWebGLErrorMessage();
+  const warning = WebGL.getWebGL2ErrorMessage();
   document.getElementById("main")!.appendChild(warning);
 }
